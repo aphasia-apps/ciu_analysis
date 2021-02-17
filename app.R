@@ -18,7 +18,7 @@ ui <- fluidPage(
     ),
     navbarPage(theme = shinytheme("flatly"), 
                title = div(a(icon("github"),
-                             href = "https://github.com/rbcavanaugh/clinical-discourse",
+                             href = "https://github.com/rbcavanaugh/ciu_analysis",
                              id = "img-id",
                              target = "_blank")),
                tabPanel("Scoring",
