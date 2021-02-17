@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-## Making correct information unit scoring slightly less painful
+## Making correct information unit scoring slightly less painful\*
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -28,3 +28,6 @@ Or access it at shinyapps.io:
 <https://pubs.asha.org/doi/abs/10.1044/jshr.3702.399>
 
 <https://scholar.google.com/scholar?hl=en&as_sdt=0%2C39&q=correct+information+unit+Nicholas+brookshire&btnG=>
+
+\*not to be construed as strong support for CIUs as a measure of
+discourse
