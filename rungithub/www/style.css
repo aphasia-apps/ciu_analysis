@@ -1,0 +1,41 @@
+/*.navbar {
+    position: relative;
+    min-height: 50px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    background: navy;
+    color: white;
+}
+*/
+#coded_sentence {
+    word-break: break-all;
+}
+
+#nb {
+    color: #5c9cdc!important;
+    text-decoration: none;
+}
+
+#contact {
+    color: #5c9cdc!important;
+    text-decoration: none;
+}
+
+#img-id {
+  position: absolute;
+  right: 25px;
+  top: 22px;
+  font-size: 2rem;
+  color: #FFFFFF;
+}
+
+html {
+    padding-bottom:5%;
+}
+
+
+.btn-default {
+    color: #ffffff;
+    background-color: #6f869f!important;
+    border-color: #57728d!important;
+}
