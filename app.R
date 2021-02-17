@@ -37,11 +37,10 @@ ui <- fluidPage(
         tags$title("CIU Analysis")
     ),
     navbarPage(theme = shinytheme("flatly"), 
-               title = div("Scoring CIUs",
-                           a(id = "img-id",target="_blank",
-                                  href = "https://github.com/rbcavanaugh/clinical-discourse",
-                                  icon("github"))
-                           ),
+               title = div(a(icon("github"),
+                             href = "https://github.com/rbcavanaugh/clinical-discourse",
+                             id = "img-id",
+                             target = "_blank")),
                tabPanel("Scoring",
                     #fluidRow(
                     sidebarLayout(fluid = T,
