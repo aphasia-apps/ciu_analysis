@@ -87,7 +87,9 @@ ui <- fluidPage(
                                                h5("Notes: "),
                                                tags$ul(
                                                  tags$li("Currently, if there are duplicate words in a sentence, selecting one of the words will only count for one CIU. However, both words in the sentence above may be highlighted in red."),
-                                                 tags$li("You should be able to change the transcript after you start scoring, provided you hit 'next' again after rescoring that sentence. However, these results could be off, so it may be best to copy your trasncript, refresh the page, and paste it in.")
+                                                 tags$li("You should be able to change the transcript after you start scoring, provided you hit 'next' again after rescoring that sentence. However, these results could be off, so it may be best to copy your trasncript, refresh the page, and paste it in."),
+                                                 tags$li("Data entered into this app is only stored temporarily as long as you are using the app and is deleted once you close the window. Furthermore, the app will time out after 5 minutes of no use, which will also clear any entered data. Still, I do not recommend entering any clearly identifying PII. You can read more about data storage in shiny apps here: https://docs.rstudio.com/shinyapps.io/Storage.html")
+                                               )
                                                )
                                       )
                                     )
