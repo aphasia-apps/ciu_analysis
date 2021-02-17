@@ -10,17 +10,20 @@ The goal of this shiny app is to make CIU scoring faster, easier, and
 more reliable.
 
 You can run the app from R on your computer by using the following code
-(note, this will automatically install any needed packages).
+(note, this will automatically install any needed packages). Don’t worry
+if you are new to R, the app should run automatically with these three
+commands. Here’s a helpful resource for getting started:
+<https://rstudio-education.github.io/hopr/starting.html>. You should not
+need Rstudio.
 
 ``` r
 # not run
 install.packages('shiny')
 library(shiny)
-shiny::runGitHub('rbcavanaugh/ciu_analysis', subdir = 'rungithub')
+shiny::runGitHub('rbcavanaugh/ciu_analysis', subdir = 'rungithub', launch)
 ```
 
-Or access it at shinyapps.io:
-<https://rb-cavanaugh.shinyapps.io/aphasia-ciu/>
+#### [Or just access it at shinyapps.io!](https://rb-cavanaugh.shinyapps.io/aphasia-ciu/)
 
 ### Find information about CIUs:
 
