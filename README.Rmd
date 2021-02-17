@@ -19,10 +19,11 @@ knitr::opts_chunk$set(
 
 The goal of this shiny app is to make CIU scoring faster, easier, and more reliable.
 
-You can run the app from R (note, this will automatically install any needed packages).
+You can run the app from R on your computer by using the following code (note, this will automatically install any needed packages).
 
 ```{r cars, eval=F}
 # not run
+install.packages('shiny')
 library(shiny)
 shiny::runGitHub('rbcavanaugh/ciu_analysis', subdir = 'rungithub')
 ```
