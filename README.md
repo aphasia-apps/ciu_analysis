@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Easier Correct Information Unit Scoring
+## Making correct information unit scoring slightly less painful
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -9,11 +9,22 @@
 The goal of this shiny app is to make CIU scoring faster, easier, and
 more reliable.
 
-You can run the app from R:
+You can run the app from R (note, this will automatically install any
+needed packages).
 
 ``` r
+# not run
 library(shiny)
-# runGithub()
+shiny::runGitHub('rbcavanaugh/ciu_analysis', subdir = 'rungithub')
 ```
 
-Or access it at this website: \[This will be a website\]
+Or access it at shinyapps.io:
+<https://rb-cavanaugh.shinyapps.io/aphasia-ciu/>
+
+### Find information about CIUs:
+
+<https://pubs.asha.org/doi/abs/10.1044/jshr.3602.338>
+
+<https://pubs.asha.org/doi/abs/10.1044/jshr.3702.399>
+
+<https://scholar.google.com/scholar?hl=en&as_sdt=0%2C39&q=correct+information+unit+Nicholas+brookshire&btnG=>
