@@ -79,8 +79,7 @@ ui <- fluidPage(
                                             
                                         )
                                       ),
-                                      fluidRow("Summary",
-                                               textOutput("final"),
+                                      fluidRow(textOutput("final"),
                                                tags$a(id = "nb",
                                                       "More information about CIU scoring can be found here", href = "https://aphasia.talkbank.org/discourse/lit/Nicholas1993.pdf", target="_blank"),br(),
                                                h5("Notes: "),
