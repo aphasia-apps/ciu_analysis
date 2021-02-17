@@ -120,9 +120,9 @@ server <- function(input,output) {
     observeEvent(selected(),{
         # input$save
         #isolate({
-        values$scored[[values$i]] = tibble(sentence = round(values$i,0),
-                                           cius = length(input$click_sentence),
-                                           words = nrow(sentences() %>% unnest_tokens(word, txt, to_lower = FALSE)))
+        values$scored[[values$i]] = tibble(Sentences = round(values$i,0),
+                                           CIUs = length(input$click_sentence),
+                                           Words = nrow(sentences() %>% unnest_tokens(word, txt, to_lower = FALSE)))
         # })
     })
     
@@ -198,7 +198,11 @@ server <- function(input,output) {
     })
     
     output$results = renderDT({
-        if (length(values$scored) == 0) {return(tibble(a = "Get started by scoring CIUs"))
+        if (length(values$scored) == 0) {return(tibble(
+            Sentences = 0,
+            CIUs = 0,
+            Words = 0
+        ))
         } else bind_rows(values$scored)
     }, rownames = FALSE, options = list(dom = 't',
     #ordering = FALSE,
