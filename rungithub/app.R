@@ -80,13 +80,13 @@ ui <- fluidPage(
                                         )
                                       ),
                                       fluidRow("Summary",
-                                               textOutput("final"), br(),
+                                               textOutput("final"),
                                                tags$a(id = "nb",
                                                       "More information about CIU scoring can be found here", href = "https://aphasia.talkbank.org/discourse/lit/Nicholas1993.pdf", target="_blank"),br(),
                                                h5("Notes: "),
                                                tags$ul(
-                                                 tags$li("Currently, if there are duplicate words in a sentence, selecting one of the words will only count for one CIU. However, both words in the sentence above may be highlighted in red."),
-                                                 tags$li("You should be able to change the transcript after you start scoring, provided you hit 'next' again after rescoring that sentence. However, these results could be off, so it may be best to copy your trasncript, refresh the page, and paste it in."),
+                                                 tags$li("Currently, if there are duplicate words in a sentence, both words in the sentence above may be highlighted in red. However, only the word that is selected will count as a CIU. Fix TBD"),
+                                                 tags$li("You should be able to change the transcript after you start scoring, provided you hit 'next' again after rescoring that sentence. However, these results could be off, so it may be best to copy your transcript, refresh the page, and paste it in."),
                                                  tags$li("Data entered into this app is only stored temporarily as long as you are using the app and is deleted once you close the window. Furthermore, the app will time out after 5 minutes of no use, which will also clear any entered data. If you are running this app using runGithub(), the application is running on your local computer. The runGithub() function simply downloads the code from github.com and runs it automatically.")
                                                )
                                                
@@ -121,7 +121,7 @@ server <- function(input,output) {
   observeEvent(selected(),{
     # input$save
     #isolate({
-    values$scored[[values$i]] = tibble(Sentences = round(values$i,0),
+    values$scored[[values$i]] = tibble(Sentence = round(values$i,0),
                                        CIUs = length(input$click_sentence),
                                        Words = nrow(sentences() %>% unnest_tokens(word, txt, to_lower = FALSE)))
     # })
@@ -200,7 +200,7 @@ server <- function(input,output) {
   
   output$results = renderDT({
     if (length(values$scored) == 0) {return(tibble(
-      Sentences = 0,
+      Sentence = 0,
       CIUs = 0,
       Words = 0
     ))
@@ -217,19 +217,19 @@ server <- function(input,output) {
   
   output$final <- renderText({
     data = bind_rows(values$scored)
-    ciu = sum(data$cius)
-    word = sum(data$words)
-    percent = round(ciu/word*100, 1)
-    ciuminute = ciu/(input$time/60)
+    ciu = sum(data$CIUs)
+    word = sum(data$Words)
+    percent = round(ciu/word*100, 2)
+    ciuminute = round(ciu/(input$time/60),2)
     paste("The scored transcript includes", ciu, "Correct Information Units out of ", word, "words. This results in", percent, "% CIUs and ",ciuminute, " words per minute.")
   })
   
   output$final_table <- renderDT({
     data = bind_rows(values$scored)
-    ciu = sum(data$cius)
-    word = sum(data$words)
-    percent = if(word > 0) {round(ciu/word*100, 1)} else 0
-    ciuminute = ciu/(input$time/60)
+    ciu = sum(data$CIUs)
+    word = sum(data$Words)
+    percent = if(word > 0) {round(ciu/word*100, 2)} else 0
+    ciuminute = round(ciu/(input$time/60),2)
     tibble(
       CIUs = ciu,
       Words = word,
