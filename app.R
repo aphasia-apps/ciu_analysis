@@ -22,64 +22,68 @@ ui <- fluidPage(
                              id = "img-id",
                              target = "_blank")),
                tabPanel("Scoring",
-                    #fluidRow(
-                    sidebarLayout(fluid = T,
-                        sidebarPanel(
-                        h4("Correct Information Unit Scoring"),
-                        p("Enter Transcript in the box below using established transcription rules for CIUs. Make sure to use periods and capitalize the first word of each sentence so that the transcript is split into sentences effectively."),
-                        textAreaInput("type",
-                                      label = "Transcript:",
-                                      value = "Young boy is practicing playing soccer. Kicking the ball up and keeping it in the air. He miskicks. It fall goes and breaks the window of his house. Of the living room actually. And bounces into the living room knocking a lamp over where his father is sitting. The father picks up the soccer ball. Looks out the window. And calls for the little boy to come and explain.",
-                                      height = '325px', width = "100%"
-                        ),
-                        numericInput("time", "Time in seconds", value= 120,
-                                     min = 1, max = 1200, step = 1)),
-                        mainPanel(
-                    fluidRow(
-                        column(
-                            width = 12
-                            ),
-                        box(width = NULL, style = "text-align:center",
-                            htmlOutput("txtOut", style = "font-size: 2rem;"), br(),
-                            uiOutput("choices"),
-                            uiOutput("coded_sentence1"),
-                            br(),
-                            actionButton("prev", "Previous Sentence", width = "150px"),
-                            actionButton("nxt", "Next Sentence", width = "150px")
-                        ),
-                        box(width = NULL, #height = "200px",
-                            column(width = 6,
-                                   h4("Final Results"),
-                                   DTOutput("final_table")
-                            ),
-                            column(width = 6,    
-                            h4("Sentence Scores"),
-                            DTOutput("results")
-                            )
-
+                        #fluidRow(
+                        sidebarLayout(fluid = T,
+                                      sidebarPanel(
+                                          h4("Correct Information Unit Scoring"),
+                                          p("Enter Transcript in the box below using established transcription rules for CIUs. Make sure to use periods and capitalize the first word of each sentence so that the transcript is split into sentences effectively."),
+                                          textAreaInput("type",
+                                                        label = "Transcript:",
+                                                        value = "Young boy is practicing playing soccer. Kicking the ball up and keeping it in the air. He miskicks. It fall goes and breaks the window of his house. Of the living room actually. And bounces into the living room knocking a lamp over where his father is sitting. The father picks up the soccer ball. Looks out the window. And calls for the little boy to come and explain.",
+                                                        height = '325px', width = "100%"
+                                          ),
+                                          numericInput("time", "Time in seconds", value= 120,
+                                                       min = 1, max = 1200, step = 1)),
+                                      mainPanel(
+                                          fluidRow(
+                                              column(
+                                                  width = 12
+                                              ),
+                                              box(width = NULL, style = "text-align:center",
+                                                  htmlOutput("txtOut", style = "font-size: 2rem;"), br(),
+                                                  uiOutput("choices"),
+                                                  uiOutput("coded_sentence1"),
+                                                  br(),
+                                                  actionButton("prev", "Previous Sentence", width = "150px"),
+                                                  actionButton("nxt", "Next Sentence", width = "150px")
+                                              ),
+                                              box(width = NULL, #height = "200px",
+                                                  column(width = 6, align = "center",
+                                                         
+                                                         h4("Final Results", style = "text-align:center"),
+                                                         tableOutput("final_table")
+                                                         
+                                                  ),
+                                                  column(width = 6, align = "center",
+                                                         h4("Sentence Scores", style = "text-align:center"),
+                                                         
+                                                         tableOutput("results")
+                                                         
+                                                  )
+                                                  
+                                              )
+                                          ),
+                                          fluidRow(textOutput("final"),
+                                                   tags$a(id = "nb",
+                                                          "More information about CIU scoring can be found here", href = "https://aphasia.talkbank.org/discourse/lit/Nicholas1993.pdf", target="_blank"),br(),
+                                                   h5("Notes: "),
+                                                   tags$ul(
+                                                       tags$li("Currently, if there are duplicate words in a sentence, both words in the sentence above may be highlighted in red. However, only the word that is selected will count as a CIU. Fix TBD"),
+                                                       tags$li("You should be able to change the transcript after you start scoring, provided you hit 'next' again after rescoring that sentence. However, these results could be off, so it may be best to copy your transcript, refresh the page, and paste it in."),
+                                                       tags$li("Data entered into this app is only stored temporarily as long as you are using the app and is deleted once you close the window. Furthermore, the app will time out after 5 minutes of no use, which will also clear any entered data. Still, I do not recommend entering any clearly identifying PII. If you are concerned about this issue, you can read more about data storage in shiny apps here: https://docs.rstudio.com/shinyapps.io/Storage.html. You can also use the runGithub command (see the github link) to run the software locally, and on some computers this can be setup as a desktop shortcut.")
+                                                   )
+                                          )
+                                      )
                         )
-                    ),
-                    fluidRow(textOutput("final"),
-                             tags$a(id = "nb",
-                                 "More information about CIU scoring can be found here", href = "https://aphasia.talkbank.org/discourse/lit/Nicholas1993.pdf", target="_blank"),br(),
-                             h5("Notes: "),
-                             tags$ul(
-                                 tags$li("Currently, if there are duplicate words in a sentence, both words in the sentence above may be highlighted in red. However, only the word that is selected will count as a CIU. Fix TBD"),
-                                 tags$li("You should be able to change the transcript after you start scoring, provided you hit 'next' again after rescoring that sentence. However, these results could be off, so it may be best to copy your transcript, refresh the page, and paste it in."),
-                                 tags$li("Data entered into this app is only stored temporarily as long as you are using the app and is deleted once you close the window. Furthermore, the app will time out after 5 minutes of no use, which will also clear any entered data. Still, I do not recommend entering any clearly identifying PII. If you are concerned about this issue, you can read more about data storage in shiny apps here: https://docs.rstudio.com/shinyapps.io/Storage.html. You can also use the runGithub command (see the github link) to run the software locally, and on some computers this can be setup as a desktop shortcut.")
-                             )
-                    )
-                        )
-                    )
-                    
-                    ),
+                        
+               ),
                tabPanel("About",
                         fluidRow(
                             p("This web-app is free and open-source. You can view the underlying code using the github link at the top right of the page. I can't promise I didn't goof somewhere writing the calculations. Please feel free to contact me with any questions or feedback."),
                             p("- Rob"),
                             a(id = "contact", href = "rob.cavanaugh.com.", "You can find my information here.", target = "_blank"),
                             div(style = "text-align:center;",
-                            actionButton("button", "Send Feedback")
+                                actionButton("button", "Send Feedback")
                             )
                         )
                )
@@ -176,22 +180,15 @@ server <- function(input,output) {
         paste0("Sentence ", values$i, ": ", outTxt)
     })
     
-    output$results = renderDT({
+    output$results = renderTable({
+        input$nxt
         if (length(values$scored) == 0) {return(tibble(
             Sentence = 0,
             CIUs = 0,
             Words = 0
         ))
-        } else bind_rows(values$scored)
-    }, rownames = FALSE, options = list(dom = 't',
-    #ordering = FALSE,
-    scrollY = "12vh",
-    scroller = TRUE,
-    fixedColumns = list(heightMatch = 'none'),
-    scrollCollapse = TRUE,
-    paging = FALSE,
-    columnDefs = list(list(className = 'dt-center dt-bottom')))
-    )
+        } else bind_rows(values$scored) %>% slice(values$i)
+    }, rownames = F, striped = T, bordered = T, hover = F, align = 'c', digits = 2)
     
     output$final <- renderText({
         data = bind_rows(values$scored)
@@ -202,7 +199,8 @@ server <- function(input,output) {
         paste("The scored transcript includes", ciu, "Correct Information Units out of ", word, "words. This results in", percent, "% CIUs and ",ciuminute, " words per minute.")
     })
     
-    output$final_table <- renderDT({
+    output$final_table <- renderTable({
+        input$nxt
         data = bind_rows(values$scored)
         ciu = sum(data$CIUs)
         word = sum(data$Words)
@@ -215,7 +213,8 @@ server <- function(input,output) {
             `CIU/min` = ciuminute
         )
         
-    }, options = list(dom = '', ordering = FALSE), rownames= FALSE)
+        
+    }, rownames = F, striped = T, bordered = T, hover = F, align = 'c', digits = 2)
     
     observeEvent(input$button, {
         showModal(

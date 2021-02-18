@@ -68,13 +68,17 @@ ui <- fluidPage(
                                             actionButton("nxt", "Next Sentence", width = "150px")
                                         ),
                                         box(width = NULL, #height = "200px",
-                                            column(width = 6,
-                                                   h4("Final Results"),
-                                                   DTOutput("final_table")
+                                            column(width = 6, align = "center",
+                                                   
+                                                   h4("Final Results", style = "text-align:center"),
+                                                   tableOutput("final_table")
+                                                   
                                             ),
-                                            column(width = 6,    
-                                                   h4("Sentence Scores"),
-                                                   DTOutput("results")
+                                            column(width = 6, align = "center",
+                                                   h4("Sentence Scores", style = "text-align:center"),
+                                                   
+                                                   tableOutput("results")
+                                                   
                                             )
                                             
                                         )
@@ -197,22 +201,15 @@ server <- function(input,output) {
     paste0("Sentence ", values$i, ": ", outTxt)
   })
   
-  output$results = renderDT({
+  output$results = renderTable({
+    input$nxt
     if (length(values$scored) == 0) {return(tibble(
       Sentence = 0,
       CIUs = 0,
       Words = 0
     ))
-    } else bind_rows(values$scored)
-  }, rownames = FALSE, options = list(dom = 't',
-                                      #ordering = FALSE,
-                                      scrollY = "12vh",
-                                      scroller = TRUE,
-                                      fixedColumns = list(heightMatch = 'none'),
-                                      scrollCollapse = TRUE,
-                                      paging = FALSE,
-                                      columnDefs = list(list(className = 'dt-center dt-bottom')))
-  )
+    } else bind_rows(values$scored) %>% slice(values$i)
+  }, rownames = F, striped = T, bordered = T, hover = F, align = 'c', digits = 2)
   
   output$final <- renderText({
     data = bind_rows(values$scored)
@@ -223,7 +220,8 @@ server <- function(input,output) {
     paste("The scored transcript includes", ciu, "Correct Information Units out of ", word, "words. This results in", percent, "% CIUs and ",ciuminute, " words per minute.")
   })
   
-  output$final_table <- renderDT({
+  output$final_table <- renderTable({
+    input$nxt
     data = bind_rows(values$scored)
     ciu = sum(data$CIUs)
     word = sum(data$Words)
@@ -236,7 +234,8 @@ server <- function(input,output) {
       `CIU/min` = ciuminute
     )
     
-  }, options = list(dom = '', ordering = FALSE), rownames= FALSE)
+    
+  }, rownames = F, striped = T, bordered = T, hover = F, align = 'c', digits = 2)
   
   observeEvent(input$button, {
     showModal(
