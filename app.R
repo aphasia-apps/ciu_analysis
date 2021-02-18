@@ -26,11 +26,12 @@ ui <- fluidPage(
                         sidebarLayout(fluid = T,
                                       sidebarPanel(
                                           h4("Correct Information Unit Scoring"),
-                                          p("Enter Transcript in the box below using established transcription rules for CIUs. Make sure to use periods and capitalize the first word of each sentence so that the transcript is split into sentences effectively."),
+                                          p("Enter Transcript in the box below. Use periods and capitalize the first word of each sentence so that the transcript is split into sentences effectively."),
+                                          p("Only include tokens that count as words! Refer to the transcription instructions in appendix B of the linked document below for complete instructions."),
                                           textAreaInput("type",
                                                         label = "Transcript:",
                                                         value = "Young boy is practicing playing soccer. Kicking the ball up and keeping it in the air. He miskicks. It fall goes and breaks the window of his house. Of the living room actually. And bounces into the living room knocking a lamp over where his father is sitting. The father picks up the soccer ball. Looks out the window. And calls for the little boy to come and explain.",
-                                                        height = '325px', width = "100%"
+                                                        height = '300px', width = "100%"
                                           ),
                                           numericInput("time", "Time in seconds", value= 120,
                                                        min = 1, max = 1200, step = 1),
