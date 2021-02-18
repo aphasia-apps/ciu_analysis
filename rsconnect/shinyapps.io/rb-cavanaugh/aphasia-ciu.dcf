@@ -5,9 +5,9 @@ account: rb-cavanaugh
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3654531
-bundleId: 4238052
+bundleId: 4238593
 url: https://rb-cavanaugh.shinyapps.io/aphasia-ciu/
-when: 1613607286.66028
+when: 1613619000.42626
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: app_render.R
+ignoredFiles: Untitled.R

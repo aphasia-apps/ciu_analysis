@@ -33,7 +33,11 @@ ui <- fluidPage(
                                                         height = '325px', width = "100%"
                                           ),
                                           numericInput("time", "Time in seconds", value= 120,
-                                                       min = 1, max = 1200, step = 1)),
+                                                       min = 1, max = 1200, step = 1),
+                                          div(style = "text-align:center;",
+                                              actionButton("save", "Save scoring to download"),
+                                              downloadButton("downloadData", "Download")
+                                          )),
                                       mainPanel(
                                           fluidRow(
                                               column(
@@ -55,7 +59,7 @@ ui <- fluidPage(
                                                          
                                                   ),
                                                   column(width = 6, align = "center",
-                                                         h4("Sentence Scores", style = "text-align:center"),
+                                                         h4("Current Sentence", style = "text-align:center"),
                                                          
                                                          tableOutput("results")
                                                          
@@ -63,15 +67,14 @@ ui <- fluidPage(
                                                   
                                               )
                                           ),
-                                          fluidRow(textOutput("final"),
-                                                   tags$a(id = "nb",
-                                                          "More information about CIU scoring can be found here", href = "https://aphasia.talkbank.org/discourse/lit/Nicholas1993.pdf", target="_blank"),br(),
-                                                   h5("Notes: "),
+                                          fluidRow("Notes:",
                                                    tags$ul(
                                                        tags$li("Currently, if there are duplicate words in a sentence, both words in the sentence above may be highlighted in red. However, only the word that is selected will count as a CIU. Fix TBD"),
                                                        tags$li("You should be able to change the transcript after you start scoring, provided you hit 'next' again after rescoring that sentence. However, these results could be off, so it may be best to copy your transcript, refresh the page, and paste it in."),
                                                        tags$li("Data entered into this app is only stored temporarily as long as you are using the app and is deleted once you close the window. Furthermore, the app will time out after 5 minutes of no use, which will also clear any entered data. Still, I do not recommend entering any clearly identifying PII. If you are concerned about this issue, you can read more about data storage in shiny apps here: https://docs.rstudio.com/shinyapps.io/Storage.html. You can also use the runGithub command (see the github link) to run the software locally, and on some computers this can be setup as a desktop shortcut.")
-                                                   )
+                                                   ),
+                                                   tags$a(id = "nb",
+                                                          "More information about CIU scoring can be found here", href = "https://aphasia.talkbank.org/discourse/lit/Nicholas1993.pdf", target="_blank"),
                                           )
                                       )
                         )
@@ -94,20 +97,109 @@ ui <- fluidPage(
 server <- function(input,output) {
     
     values = reactiveValues(i=1,
-                            scored = list())
+                            scored = list(),
+                            out_cius = list(),
+                            out_words = list(),
+                            out_sentences = list(),
+                            out_time = list(),
+                            out_html = list()
+    )
     
     output$count <- renderText({
         paste0("i = ", values$i)
     })
     
     observeEvent(selected(),{
-        # input$save
-        #isolate({
         values$scored[[values$i]] = tibble(Sentence = round(values$i,0),
                                            CIUs = length(input$click_sentence),
                                            Words = nrow(sentences() %>% unnest_tokens(word, txt, to_lower = FALSE)))
-        # })
+        
+        values$out_cius[values$i] = input$click_sentence
+        values$out_words[values$i] = sentences() %>% unnest_tokens(word, txt, to_lower = FALSE)
+        values$out_sentences[values$i] = sentences()
     })
+    
+    save_data <- eventReactive(input$save,{ 
+        
+        if (length(values$out_cius) ==0){return(tibble(a="You didn't enter any CIUs"))
+        } else{
+            
+            cius = as_data_frame(t(map_dfr(values$out_cius, ~as_data_frame(t(.))))) %>%
+                pivot_longer(cols = tidyselect::everything(), names_to = "sentence", values_to = "val") %>%
+                mutate(sentence = str_remove(sentence, "V")) %>%
+                drop_na() %>%
+                arrange(sentence) %>%
+                rename(item = val, sentence_num = sentence) %>%
+                mutate(type = "ciu")
+            
+            words = as_data_frame(t(map_dfr(values$out_words, ~as_data_frame(t(.))))) %>%
+                pivot_longer(cols = tidyselect::everything(), names_to = "sentence", values_to = "val") %>%
+                mutate(sentence = str_remove(sentence, "V")) %>%
+                drop_na() %>%
+                arrange(sentence) %>%
+                rename(item = val, sentence_num = sentence) %>%
+                mutate(type = "word")
+            
+            sentences = as_data_frame(t(map_dfr(values$out_sentences, ~as_data_frame(t(.))))) %>%
+                pivot_longer(cols = tidyselect::everything(), names_to = "sentence", values_to = "val") %>%
+                mutate(sentence = str_remove(sentence, "V")) %>%
+                rename(item = val, sentence_num = sentence) %>%
+                mutate(type = "sentence")
+            
+            time = tibble(
+                type = "time",
+                item = as.character(input$time),
+                sentence_num = 'seconds'
+            )
+            
+            total_ciu = tibble(
+                type = "total_ciu",
+                item = as.character(nrow(cius)),
+                sentence_num = NA
+            )
+            
+            cium = tibble(
+                type = "ciu_minute",
+                item = as.character(nrow(cius)/input$time),
+                sentence_num = NA
+            )
+            
+            perciu = tibble(
+                type = "ciu_percent",
+                item = as.character(nrow(cius)/nrow(words)),
+                sentence_num = NA
+            )
+            
+            transcript = tibble(
+                type = "transcript",
+                item = as.character(input$type),
+                sentence_num = NA
+            )
+            
+            bind_rows(transcript, total_ciu, cium, perciu, time, cius, words, sentences)
+        }
+    })
+    
+    observeEvent(input$save,{
+        if(length(values$out_cius > 0)) {
+            Sys.sleep(1)
+            showNotification("Ready to download", type = "message")
+        } else {
+            showNotification("You didn't score any CIUs!", type = "error")
+        }
+    })
+    
+    # Downloadable csv of selected dataset ----
+    
+    output$downloadData <- downloadHandler(
+        filename = function() {
+            paste("downloadCIUs", ".csv", sep = "")
+        },
+        content = function(file) {
+            write.csv(save_data(), file, row.names = FALSE)
+        }
+    )
+    
     
     
     observe({
@@ -200,7 +292,6 @@ server <- function(input,output) {
     })
     
     output$final_table <- renderTable({
-        input$nxt
         data = bind_rows(values$scored)
         ciu = sum(data$CIUs)
         word = sum(data$Words)
