@@ -46,17 +46,18 @@ ui <- fluidPage(
                       sidebarLayout(fluid = T,
                                     sidebarPanel(
                                       h4("Correct Information Unit Scoring"),
-                                      p("Enter Transcript in the box below. Use periods and capitalize the first word of each sentence so that the transcript is split into sentences effectively."),
-                                      p("Only include tokens that count as words! Refer to the transcription instructions in appendix B of the linked document below for complete instructions"),
+                                      p("Enter Transcript below. Use periods and capitalize the first word of each sentence."),
+                                      p("Only include tokens that count as words! See appendix B of the linked document below for scoring instructions."),
                                       textAreaInput("type",
                                                     label = "Transcript:",
                                                     value = "Young boy is practicing playing soccer. Kicking the ball up and keeping it in the air. He miskicks. It fall goes and breaks the window of his house. Of the living room actually. And bounces into the living room knocking a lamp over where his father is sitting. The father picks up the soccer ball. Looks out the window. And calls for the little boy to come and explain.",
-                                                    height = '300px', width = "100%"
+                                                    height = '250px', width = "100%"
                                       ),
                                       numericInput("time", "Time in seconds", value= 120,
                                                    min = 1, max = 1200, step = 1),
+                                      textInput("task_name", "Filename (no special characters)"),
                                       div(style = "text-align:center;",
-                                          actionButton("save", "Save scoring to download"),
+                                          actionButton("save", "Prepare download"),
                                           downloadButton("downloadData", "Download")
                                       )),
                                     mainPanel(
@@ -197,7 +198,13 @@ server <- function(input,output) {
         sentence_num = NA
       )
       
-      bind_rows(transcript, total_ciu, cium, perciu, time, cius, words, sentences)
+      stimulus = tibble(
+        type = "stimulus",
+        item = input$task_name,
+        sentence_num = NA
+      )
+      
+      bind_rows(stimulus, transcript, total_ciu, cium, perciu, time, cius, words, sentences)
     }
   })
   
@@ -214,7 +221,7 @@ server <- function(input,output) {
   
   output$downloadData <- downloadHandler(
     filename = function() {
-      paste("downloadCIUs", ".csv", sep = "")
+      paste(input$task_name, "CIU.csv", sep = "")
     },
     content = function(file) {
       write.csv(save_data(), file, row.names = FALSE)
