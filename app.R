@@ -33,8 +33,8 @@ ui <- fluidPage(
                                                         value = "Young boy is practicing playing soccer. Kicking the ball up and keeping it in the air. He miskicks. It fall goes and breaks the window of his house. Of the living room actually. And bounces into the living room knocking a lamp over where his father is sitting. The father picks up the soccer ball. Looks out the window. And calls for the little boy to come and explain.",
                                                         height = '250px', width = "100%"
                                           ),
-                                          numericInput("time", "Time in seconds", value= 120,
-                                                       min = 1, max = 1200, step = 1),
+                                          numericInput("time", "Time (s)", value= 120,
+                                                       min = 1, max = 1200, step = 1, width = "80px"),
                                           textInput("task_name", "Filename (no special characters)"),
                                           div(style = "text-align:center;",
                                               actionButton("save", "Prepare download"),
@@ -57,7 +57,9 @@ ui <- fluidPage(
                                                   column(width = 6, align = "center",
                                                          
                                                          h4("Final Results", style = "text-align:center"),
-                                                         tableOutput("final_table")
+                                                         tableOutput("final_table"),
+                                                         checkboxInput("mask", "Mask Results", value = F)
+                                                         
                                                          
                                                   ),
                                                   column(width = 6, align = "center",
@@ -300,6 +302,10 @@ server <- function(input,output) {
     })
     
     output$final_table <- renderTable({
+        
+        if(input$mask==1){
+            return(tibble(results = "masked"))
+        } else{
         data = bind_rows(values$scored)
         ciu = sum(data$CIUs)
         word = sum(data$Words)
@@ -311,9 +317,12 @@ server <- function(input,output) {
             `%CIUs` = percent,
             `CIU/min` = ciuminute
         )
+        }
         
         
     }, rownames = F, striped = T, bordered = T, hover = F, align = 'c', digits = 2)
+    
+    
     
     observeEvent(input$button, {
         showModal(
