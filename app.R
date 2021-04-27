@@ -4,13 +4,14 @@ library(shiny)
 library(waiter)
 library(shinyWidgets)
 library(shinythemes)
+library(shinydashboard)
+
 check = NULL
 loading_function <- function(){
 library(tidyverse)
 library(tableHTML)
 library(tidytext)
 library(tokenizers)
-library(shinydashboard)
 library(DT)
 check = 1
 waiter_hide()
