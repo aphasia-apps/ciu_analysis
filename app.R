@@ -1,16 +1,24 @@
 ##### website version ####
 
 library(shiny)
+library(waiter)
+library(shinyWidgets)
+library(shinythemes)
+check = NULL
+loading_function <- function(){
 library(tidyverse)
 library(tableHTML)
-library(shinyWidgets)
 library(tidytext)
 library(tokenizers)
-library(shinythemes)
 library(shinydashboard)
 library(DT)
+check = 1
+waiter_hide()
+}
 
 ui <- fluidPage(
+    use_waiter(),
+    waiter_show_on_load(color = "white", html = spin_flowers()),
     useShinydashboard(),
     tags$head(
         tags$link(rel = "stylesheet", type = "text/css", href = "style.css"),
@@ -99,6 +107,10 @@ ui <- fluidPage(
 )
 
 server <- function(input,output) {
+    
+    if(is.null(check)){
+        loading_function()
+    }
     
     values = reactiveValues(i=1,
                             scored = list(),
