@@ -22,6 +22,7 @@ install.packages('shiny')
 library(shiny)
 shiny::runGitHub('rbcavanaugh/ciu_analysis', subdir = 'rungithub', launch)
 ```
+Or see here: https://robcavanaugh.app/shiny/ciu/
 
 ### Find information about CIUs:
 
