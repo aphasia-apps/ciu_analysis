@@ -18,7 +18,6 @@ waiter_hide()
 }
 
 ui <- fluidPage(
-    
     use_waiter(),
     waiter_show_on_load(color = "white", html = spin_flowers()),
     useShinydashboard(),
