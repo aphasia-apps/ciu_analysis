@@ -23,8 +23,6 @@ library(shiny)
 shiny::runGitHub('rbcavanaugh/ciu_analysis', subdir = 'rungithub', launch)
 ```
 
-#### [Or just access it at shinyapps.io!](https://rb-cavanaugh.shinyapps.io/aphasia-ciu/)
-
 ### Find information about CIUs:
 
 <https://pubs.asha.org/doi/abs/10.1044/jshr.3602.338>
